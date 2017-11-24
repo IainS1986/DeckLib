@@ -12,6 +12,17 @@ namespace DeckLib.Models
 
         public CardRank Rank { get; private set; }
 
+        public CardColour Colour
+        {
+            get
+            {
+                if (Suit == CardSuit.Spade || Suit == CardSuit.Club)
+                    return CardColour.Black;
+                else
+                    return CardColour.Red;
+            }
+        }
+
         public static bool operator ==(Card left, Card right)
         {
             if (ReferenceEquals(left, right))

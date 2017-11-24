@@ -21,6 +21,6 @@ namespace DeckLib.Models
         Ten,
         Jack,
         Queen,
-        King,
+        King
     }
 }

@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace DeckLib.Models
 {
-    public enum CardSuit
+    public enum CardColour
     {
-        Spade = 0,
-        Heart,
-        Club,
-        Diamond
+        Red = 0,
+        Black,
     }
 }

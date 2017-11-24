@@ -8,6 +8,8 @@ namespace DeckLib.Models
 {
     public class Deck
     {
+        static Random sRand = new Random();
+
         public List<Card> Cards { get; private set; }
 
         public Deck()
@@ -69,14 +71,46 @@ namespace DeckLib.Models
             Cards.Clear();
         }
 
+        //Fisher Yates shuffle
         public void Shuffle(int count = 1)
         {
+            if (count <= 0)
+                return;
 
+            for(int i=0; i< count; i++)
+            {
+                for (int n = Cards.Count - 1; n > 0; --n)
+                {
+                    int k = sRand.Next(n + 1);
+                    Card temp = Cards[n];
+                    Cards[n] = Cards[k];
+                    Cards[k] = temp;
+                }
+            }
         }
 
+        //Not needed but I like my card magic, this does a perfect Out Faro Shuffle
         public void Faro(int count = 1)
         {
+            if (count <= 0)
+                return;
 
+            //Faro fucntion to find the index of the new card x
+            //is  f(x) = (2^k)x(mod51) where k is number of shuffles and x is the index of the card
+
+            //Make a copy of the deck, and faro this into current deck
+            List<Card> copy = new List<Card>();
+            foreach (var c in Cards)
+                copy.Add(new Card(c.Suit, c.Rank));
+
+            for(int i=0; i<copy.Count; i++)
+            {
+                int index = ((int)Math.Pow(2, count) * i) % 51;
+
+                //We are moving i to index
+                Cards.RemoveAt(index);
+                Cards.Insert(index, copy[i]);
+            }
         }
 
         public Card Peek()

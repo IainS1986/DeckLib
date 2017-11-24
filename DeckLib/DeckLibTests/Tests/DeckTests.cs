@@ -6,5 +6,9 @@ namespace DeckLibTests
     [TestClass]
     public class DeckTests
     {
+        [TestMethod]
+        public void DeckTest()
+        {
+        }
     }
 }

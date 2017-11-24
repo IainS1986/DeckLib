@@ -4,11 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace DeckLibTests
 {
     [TestClass]
-    public class UnitTest1
+    public class DeckTests
     {
-        [TestMethod]
-        public void TestMethod1()
-        {
-        }
     }
 }

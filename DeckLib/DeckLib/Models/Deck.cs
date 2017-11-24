@@ -156,5 +156,11 @@ namespace DeckLib.Models
                 hands[hand].Cards.Add(Pop());
             }
         }
+
+        public void Sort()
+        {
+            //This uses the IComparable implementation of Card
+            Cards.Sort();
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeckLib.Models
 {
-    public class Card : IEquatable<Card>, IComparer<Card>
+    public class Card : IEquatable<Card>, IComparable<Card>
     {
         public CardSuit Suit { get; private set; }
 
@@ -28,7 +28,7 @@ namespace DeckLib.Models
             if (ReferenceEquals(left, right))
                 return true;
 
-            if (left == null || right == null)
+            if ((object)left == null || (object)right == null)
                 return false;
 
             return left.Equals(right);
@@ -44,7 +44,7 @@ namespace DeckLib.Models
             if (ReferenceEquals(left, right))
                 return false;
 
-            if (left == null || right == null)
+            if ((object)left == null || (object)right == null)
                 return false;
 
             return left.Rank < right.Rank;
@@ -55,7 +55,7 @@ namespace DeckLib.Models
             if (ReferenceEquals(left, right))
                 return false;
 
-            if (left == null || right == null)
+            if ((object)left == null || (object)right == null)
                 return false;
 
             return left.Rank > right.Rank;
@@ -66,7 +66,7 @@ namespace DeckLib.Models
             if (ReferenceEquals(left, right))
                 return true;
 
-            if (left == null || right == null)
+            if ((object)left == null || (object)right == null)
                 return false;
 
             return left.Rank <= right.Rank;
@@ -77,7 +77,7 @@ namespace DeckLib.Models
             if (ReferenceEquals(left, right))
                 return true;
 
-            if (left == null || right == null)
+            if ((object)left == null || (object)right == null)
                 return false;
 
             return left.Rank >= right.Rank;
@@ -103,28 +103,6 @@ namespace DeckLib.Models
             return Rank == other.Rank && Suit == other.Suit;
         }
 
-        public int Compare(Card x, Card y)
-        {
-            if (x == null && y != null)
-                return -1;
-
-            if (x != null && y == null)
-                return 1;
-
-            //Sort by Suit first
-            //Sort by Rank if suits are equal
-            if (x.Suit < y.Suit)
-                return -1;
-            else if (x.Suit > y.Suit)
-                return 1;
-            else if (x.Rank < y.Rank)
-                return -1;
-            else if (y.Rank > x.Rank)
-                return 1;
-            else
-                return 0;
-        }
-
         public override bool Equals(object obj)
         {
             return Equals(obj as Card);
@@ -138,6 +116,25 @@ namespace DeckLib.Models
         public override string ToString()
         {
             return string.Format("{0} of {1}s", Rank, Suit);
+        }
+
+        public int CompareTo(Card other)
+        {
+            if (other == null)
+                return 1;
+
+            //Sort by Suit first
+            //Sort by Rank if suits are equal
+            if (Suit < other.Suit)
+                return -1;
+            else if (Suit > other.Suit)
+                return 1;
+            else if (Rank < other.Rank)
+                return -1;
+            else if (Rank > other.Rank)
+                return 1;
+            else
+                return 0;
         }
     }
 }

@@ -105,7 +105,7 @@ namespace DeckLib.Models
 
             for(int i=0; i<copy.Count; i++)
             {
-                int index = ((int)Math.Pow(2, count) * i) % 51;
+                int index = ((int)Math.Pow(2, count) * i) % (Cards.Count - 1);
 
                 //We are moving i to index
                 Cards.RemoveAt(index);

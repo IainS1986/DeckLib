@@ -22,6 +22,46 @@ namespace DeckLibTests
         }
 
         [TestMethod]
+        public void SameCardReferencesAreCorrectlyEqualWhenEqualsMethodUsed()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Club, CardRank.Three);
+
+            //Action
+            bool isEqual = left.Equals(left);
+
+            //Assert
+            Assert.IsTrue(isEqual);
+        }
+
+        [TestMethod]
+        public void SameCardReferencesAreCorrectlyEqualWhenOperrandIsUsed()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Club, CardRank.Three);
+
+            //Action
+            bool isEqual = left == left;
+
+            //Assert
+            Assert.IsTrue(isEqual);
+        }
+
+        [TestMethod]
+        public void CardCheckedWithNullIsNotEqualWhenUsingEqualsMethod()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Club, CardRank.Three);
+            Card right = null;
+
+            //Action
+            bool isEqual = left.Equals(right);
+
+            //Assert
+            Assert.IsFalse(isEqual);
+        }
+
+        [TestMethod]
         public void SameCardsAreCorrectlyEqualWhenOpperandIsUsed()
         {
             //Arrange
@@ -33,6 +73,20 @@ namespace DeckLibTests
 
             //Assert
             Assert.IsTrue(isEqual);
+        }
+
+        [TestMethod]
+        public void CardCheckedWithNullIsNotEqualWhenUsingOperrand()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Club, CardRank.Three);
+            Card right = null;
+
+            //Action
+            bool isEqual = left == right;
+
+            //Assert
+            Assert.IsFalse(isEqual);
         }
 
         [TestMethod]
@@ -154,6 +208,33 @@ namespace DeckLibTests
         }
 
         [TestMethod]
+        public void SameCardReferenceLowerThanIsFalse()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Spade, CardRank.Ace);
+
+            //Action
+            bool leftIsLower = left < left;
+
+            //Assert
+            Assert.IsFalse(leftIsLower);
+        }
+
+        [TestMethod]
+        public void CardLessThanOperrandIsFalseWhenUsedWithNull()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Spade, CardRank.Ace);
+            Card right = null;
+
+            //Action
+            bool leftIsLower = left < right;
+
+            //Assert
+            Assert.IsFalse(leftIsLower);
+        }
+
+        [TestMethod]
         public void SameSuitHigherRankIsMoreThan()
         {
             //Arrange
@@ -165,6 +246,33 @@ namespace DeckLibTests
 
             //Assert
             Assert.IsTrue(rightIsHigher);
+        }
+
+        [TestMethod]
+        public void SameCardReferenceGreaterThanIsFalse()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Spade, CardRank.Ace);
+
+            //Action
+            bool leftIsLower = left > left;
+
+            //Assert
+            Assert.IsFalse(leftIsLower);
+        }
+
+        [TestMethod]
+        public void CardGreaterThanOperrandIsFalseWhenUsedWithNull()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Spade, CardRank.Ace);
+            Card right = null;
+
+            //Action
+            bool leftIsLower = left > right;
+
+            //Assert
+            Assert.IsFalse(leftIsLower);
         }
 
         [TestMethod]
@@ -230,6 +338,33 @@ namespace DeckLibTests
         }
 
         [TestMethod]
+        public void SameCardReferenceLowerThanOrEqualIsTrue()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Spade, CardRank.Ace);
+
+            //Action
+            bool leftIsLower = left <= left;
+
+            //Assert
+            Assert.IsTrue(leftIsLower);
+        }
+
+        [TestMethod]
+        public void CardLessThanOrEqualOperrandIsFalseWhenUsedWithNull()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Spade, CardRank.Ace);
+            Card right = null;
+
+            //Action
+            bool leftIsLower = left <= right;
+
+            //Assert
+            Assert.IsFalse(leftIsLower);
+        }
+
+        [TestMethod]
         public void SameSuitRanksHigherOrEqual()
         {
             //Arrange
@@ -261,6 +396,47 @@ namespace DeckLibTests
             //Assert
             Assert.IsTrue(rightIsHigher);
             Assert.IsTrue(leftIsEqual);
+        }
+
+        [TestMethod]
+        public void SameCardReferenceGreaterThanOrEqualIsTrue()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Spade, CardRank.Ace);
+
+            //Action
+            bool leftIsLower = left >= left;
+
+            //Assert
+            Assert.IsTrue(leftIsLower);
+        }
+
+        [TestMethod]
+        public void CardGreaterThanOrEqualOperrandIsFalseWhenUsedWithNull()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Spade, CardRank.Ace);
+            Card right = null;
+
+            //Action
+            bool leftIsLower = left >= right;
+
+            //Assert
+            Assert.IsFalse(leftIsLower);
+        }
+
+        [TestMethod]
+        public void CardComparedWithNullIsSortedCorrectly()
+        {
+            //Arrange
+            Card left = new Card(CardSuit.Spade, CardRank.Ace);
+            Card right = null;
+
+            //Action
+            int c = left.CompareTo(right);
+
+            //Assert
+            Assert.AreEqual(1, c);
         }
 
         [TestMethod]
@@ -382,6 +558,95 @@ namespace DeckLibTests
 
             //Assert
             Assert.AreEqual(-1, one.CompareTo(two));
+        }
+
+        [TestMethod]
+        public void ObjectEqualsCheckOnCardsThatAreEqual()
+        {
+            //Arrange
+            object one = null;
+            object two = null;
+
+            one = new Card(CardSuit.Spade, CardRank.Ace);
+            two = new Card(CardSuit.Spade, CardRank.Ace);
+
+            //Action
+            bool isEqual = one.Equals(two);
+
+
+            //Assert
+            Assert.IsTrue(isEqual);
+        }
+
+        [TestMethod]
+        public void ObjectEqualsCheckOnCardsThatAreDifferentSuit()
+        {
+            //Arrange
+            object one = null;
+            object two = null;
+
+            one = new Card(CardSuit.Spade, CardRank.Ace);
+            two = new Card(CardSuit.Club, CardRank.Ace);
+
+            //Action
+            bool isEqual = one.Equals(two);
+
+            //Assert
+            Assert.IsFalse(isEqual);
+        }
+
+        [TestMethod]
+        public void ObjectEqualsCheckOnCardsThatAreDifferentRank()
+        {
+            //Arrange
+            object one = null;
+            object two = null;
+
+            one = new Card(CardSuit.Spade, CardRank.Ace);
+            two = new Card(CardSuit.Spade, CardRank.Two);
+
+            //Action
+            bool isEqual = one.Equals(two);
+
+            //Assert
+            Assert.IsFalse(isEqual);
+        }
+
+        [TestMethod]
+        public void CardHashCodesAreCorrect()
+        {
+            //Arrange
+            Card one = new Card(CardSuit.Club, CardRank.Ace);
+            Card two = new Card(CardSuit.Diamond, CardRank.Four);
+            Card three = new Card(CardSuit.Heart, CardRank.King);
+
+            int oneHash = (int)CardSuit.Club ^ (int)CardRank.Ace;
+            int twoHash = (int)CardSuit.Diamond ^ (int)CardRank.Four;
+            int threeHash = (int)CardSuit.Heart ^ (int)CardRank.King;
+
+            //Action
+            int oneTestHash = one.GetHashCode();
+            int twoTestHash = two.GetHashCode();
+            int threeTestHash = three.GetHashCode();
+
+            //Assert
+            Assert.AreEqual(oneHash, oneTestHash);
+            Assert.AreEqual(twoHash, twoTestHash);
+            Assert.AreEqual(threeHash, threeTestHash);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "A card should only be allowed with predefinied suits")]
+        public void CantCreateACardWithAnInvalidSuit()
+        {
+            Card invalid = new Card((CardSuit)5, CardRank.Ace);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "A card should only be allowed with predefinied ranks")]
+        public void CantCreateACardWithAnInvalidRank()
+        {
+            Card invalid = new Card(CardSuit.Heart, (CardRank)15);
         }
     }
 }

@@ -110,7 +110,7 @@ namespace DeckLib.Models
 
         public override int GetHashCode()
         {
-            return Suit.GetHashCode() ^ Rank.GetHashCode();
+            return (int)Suit ^ (int)Rank;
         }
 
         public override string ToString()

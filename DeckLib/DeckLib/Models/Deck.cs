@@ -147,7 +147,7 @@ namespace DeckLib.Models
 
         public void Push(Card card)
         {
-            Cards.Add(card);
+            Cards.Insert(0, card);
         }
 
         public void Deal(List<Deck> hands, int cardsPerHand = -1)
@@ -166,7 +166,7 @@ namespace DeckLib.Models
 
                 int hand = i % hands.Count;
 
-                hands[hand].Cards.Add(Pop());
+                hands[hand].Push(Pop());
             }
         }
 

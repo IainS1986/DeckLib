@@ -386,7 +386,7 @@ namespace DeckLibTests
 
             //Assert
             Assert.AreEqual(5, deck.Cards.Count);
-            Assert.AreEqual(top, deck.Cards[deck.Cards.Count - 1]);
+            Assert.AreEqual(top, deck.Peek());
         }
 
         [TestMethod]
@@ -410,6 +410,236 @@ namespace DeckLibTests
 
         }
 
+        [TestMethod]
+        public void DealingToNullHandsDoesNotErrorAndDealsNoCards()
+        {
+            //Arrange
+            Deck deck = new Deck();
+            List<Deck> hands = null;
+
+            //Action
+            deck.Deal(hands);
+
+            //Assert
+            AssertNewDeckOrder(deck);
+        }
+
+        [TestMethod]
+        public void DealingToNoHandsDoesNotErrorAndDealsNoCards()
+        {
+            //Arrange
+            Deck deck = new Deck();
+            List<Deck> hands = new List<Deck>();
+
+            //Action
+            deck.Deal(hands);
+
+            //Assert
+            AssertNewDeckOrder(deck);
+        }
+
+        [TestMethod]
+        public void DealingAllCardsClearsTheDeck()
+        {
+            //Arrange
+            Deck deck = new Deck();
+            List<Deck> hands = new List<Deck>()
+            {
+                new Deck(new List<Card>())
+            };
+
+            //Action
+            deck.Deal(hands);
+
+            //Assert
+            Assert.AreEqual(0, deck.Cards.Count);
+        }
+
+        [TestMethod]
+        public void DealingAllCardsMovesAllCardsToHands()
+        {
+            //Arrange
+            Deck deck = new Deck();
+            List<Deck> hands = new List<Deck>()
+            {
+                new Deck(new List<Card>())
+            };
+
+            //Action
+            deck.Deal(hands);
+
+            //Assert
+            Assert.AreEqual(52, hands[0].Cards.Count);
+        }
+
+        [TestMethod]
+        public void DeadlingAllCardsIsEvenlyDealtAcrossHands()
+        {
+            //Arrange
+            Deck deck = new Deck();
+            List<Deck> hands = new List<Deck>()
+            {
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>())
+            };
+
+            //Action
+            deck.Deal(hands);
+
+            //Assert
+            Assert.AreEqual(13, hands[0].Cards.Count);
+            Assert.AreEqual(13, hands[1].Cards.Count);
+            Assert.AreEqual(13, hands[2].Cards.Count);
+            Assert.AreEqual(13, hands[3].Cards.Count);
+        }
+
+        [TestMethod]
+        public void DeadlingAllCardsAreDealtAcrossHandsButFirstHandsResultInOneExtraCardWhenUnevenAmounts()
+        {
+            //Arrange
+            Deck deck = new Deck();
+            List<Deck> hands = new List<Deck>()
+            {
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>())
+            };
+
+            //Action
+            deck.Deal(hands);
+
+            //Assert
+            Assert.AreEqual(11, hands[0].Cards.Count);
+            Assert.AreEqual(11, hands[1].Cards.Count);
+            Assert.AreEqual(10, hands[2].Cards.Count);
+            Assert.AreEqual(10, hands[3].Cards.Count);
+            Assert.AreEqual(10, hands[4].Cards.Count);
+        }
+
+        [TestMethod]
+        public void DealingAFixedAmountOfCardsDealsOnlyThoseCards()
+        {
+            //Arrange
+            Deck deck = new Deck();
+            List<Deck> hands = new List<Deck>()
+            {
+                new Deck(new List<Card>())
+            };
+
+            //Action
+            deck.Deal(hands, 5);
+
+            //Assert
+            Assert.AreEqual(47, deck.Cards.Count);
+            Assert.AreEqual(5, hands[0].Cards.Count);
+        }
+
+        [TestMethod]
+        public void DealingAFixedAmountOfCardsToMultipleHandsDealsOnlyThoseCardsAndHandsAreEqual()
+        {
+            //Arrange
+            Deck deck = new Deck();
+            List<Deck> hands = new List<Deck>()
+            {
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>())
+            };
+
+            //Action
+            deck.Deal(hands, 5);
+
+            //Assert
+            Assert.AreEqual(32, deck.Cards.Count);
+            Assert.AreEqual(5, hands[0].Cards.Count);
+            Assert.AreEqual(5, hands[1].Cards.Count);
+            Assert.AreEqual(5, hands[2].Cards.Count);
+            Assert.AreEqual(5, hands[3].Cards.Count);
+        }
+
+        [TestMethod]
+        public void DealingAFixedAmountOfCardsToMultipleHandsWorksWhenTheAmountToDealIsHigherThanTheTotalCards()
+        {
+            //Arrange
+            Deck deck = new Deck();
+            List<Deck> hands = new List<Deck>()
+            {
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>())
+            };
+
+            //Action
+            deck.Deal(hands, 100);
+
+            //Assert
+            Assert.AreEqual(0, deck.Cards.Count);
+            Assert.AreEqual(13, hands[0].Cards.Count);
+            Assert.AreEqual(13, hands[1].Cards.Count);
+            Assert.AreEqual(13, hands[2].Cards.Count);
+            Assert.AreEqual(13, hands[3].Cards.Count);
+        }
+
+        [TestMethod]
+        public void DealingRunsFromTheTopOfTheDeckToTheBottomReversingTheOrder()
+        {
+            //Arrange
+            Deck deck = new Deck();
+            List<Deck> hands = new List<Deck>()
+            {
+                new Deck(new List<Card>()),
+            };
+
+            //Action
+            deck.Deal(hands);
+
+            //Assert
+            Assert.AreEqual(0, deck.Cards.Count);
+            Assert.AreEqual(52, hands[0].Cards.Count);
+            AssertReverseNewDeckOrder(hands[0]);
+        }
+
+        [TestMethod]
+        public void DealingDealsCardsInOrderToHandsOneAtATime()
+        {
+            //Arrange
+            Deck deck = new Deck();
+            Deck deck2 = new Deck();
+            List<Deck> hands = new List<Deck>()
+            {
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>()),
+                new Deck(new List<Card>())
+            };
+
+            //Action
+            deck.Deal(hands);
+
+            //Assert - Don't do allcards
+            Assert.AreEqual(deck2.Cards[0], hands[0].Cards[hands[0].Cards.Count - 1]);//First card went to first hand, so is now at the bottom of the first hand deck
+            Assert.AreEqual(deck2.Cards[1], hands[1].Cards[hands[1].Cards.Count - 1]);
+            Assert.AreEqual(deck2.Cards[2], hands[2].Cards[hands[2].Cards.Count - 1]);
+            Assert.AreEqual(deck2.Cards[3], hands[3].Cards[hands[3].Cards.Count - 1]);
+
+            Assert.AreEqual(deck2.Cards[4], hands[0].Cards[hands[0].Cards.Count - 2]);
+            Assert.AreEqual(deck2.Cards[5], hands[1].Cards[hands[1].Cards.Count - 2]);
+            Assert.AreEqual(deck2.Cards[6], hands[2].Cards[hands[2].Cards.Count - 2]);
+            Assert.AreEqual(deck2.Cards[7], hands[3].Cards[hands[3].Cards.Count - 2]);
+
+            //Then this should loop through all cards and check, the above is left to help explain wtf is going on below...
+            for (int i=0; i<deck2.Cards.Count; i++)
+            {
+                Assert.AreEqual(deck2.Cards[i], hands[i % 4].Cards[hands[i % 4].Cards.Count - (1  + (i / 4))]);
+            }
+        }
+
         private List<Card> GetPacket()
         {
             return new List<Card>()
@@ -425,6 +655,23 @@ namespace DeckLibTests
         {
             CardSuit[] suits = new CardSuit[4] { CardSuit.Spade, CardSuit.Heart, CardSuit.Club, CardSuit.Diamond };
             CardRank[] ranks = new CardRank[13] { CardRank.Ace, CardRank.Two, CardRank.Three, CardRank.Four, CardRank.Five, CardRank.Six, CardRank.Seven, CardRank.Eight, CardRank.Nine, CardRank.Ten, CardRank.Jack, CardRank.Queen, CardRank.King };
+
+            int c = 0;
+            for (int i = 0; i < suits.Length; i++)
+            {
+                for (int j = 0; j < ranks.Length; j++)
+                {
+                    Card card = deck.Cards[c++];
+                    Assert.AreEqual(suits[i], card.Suit);
+                    Assert.AreEqual(ranks[j], card.Rank);
+                }
+            }
+        }
+
+        private void AssertReverseNewDeckOrder(Deck deck)
+        {
+            CardSuit[] suits = new CardSuit[4] { CardSuit.Diamond, CardSuit.Club, CardSuit.Heart, CardSuit.Spade };
+            CardRank[] ranks = new CardRank[13] { CardRank.King, CardRank.Queen, CardRank.Jack, CardRank.Ten, CardRank.Nine, CardRank.Eight, CardRank.Seven, CardRank.Six, CardRank.Five, CardRank.Four, CardRank.Three, CardRank.Two, CardRank.Ace };
 
             int c = 0;
             for (int i = 0; i < suits.Length; i++)

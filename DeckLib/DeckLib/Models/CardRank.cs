@@ -9,7 +9,6 @@ namespace DeckLib.Models
     public enum CardRank
     {
         Ace = 1,
-        One,
         Two,
         Three,
         Four,

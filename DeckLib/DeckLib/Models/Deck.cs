@@ -10,10 +10,11 @@ namespace DeckLib.Models
     {
         static Random sRand = new Random();
 
-        public List<Card> Cards { get; private set; }
+        public List<Card> Cards { get; private set; } = new List<Card>();
 
         public Deck()
         {
+
             //Setup a deck of 52 cards by default (New Deck Order)
             var suits = Enum.GetValues(typeof(CardSuit)).Cast<CardSuit>();
             var ranks = Enum.GetValues(typeof(CardRank)).Cast<CardRank>();
@@ -97,20 +98,32 @@ namespace DeckLib.Models
 
             //Faro fucntion to find the index of the new card x
             //is  f(x) = (2^k)x(mod51) where k is number of shuffles and x is the index of the card
+            //Annoyingly this breaks for the last card, as it will try to put it at index 0. So i've hacked that a bit
 
             //Make a copy of the deck, and faro this into current deck
             List<Card> copy = new List<Card>();
             foreach (var c in Cards)
                 copy.Add(new Card(c.Suit, c.Rank));
 
+            //Array for replacement
+            Card[] newOrder = new Card[copy.Count];
+
             for(int i=0; i<copy.Count; i++)
             {
-                int index = ((int)Math.Pow(2, count) * i) % (Cards.Count - 1);
+                if(i == copy.Count - 1)
+                {
+                    newOrder[i] = copy[i];
+                }
+                else
+                {
+                    int index = (int)((Math.Pow(2, count) * i) % (Cards.Count - 1));
 
-                //We are moving i to index
-                Cards.RemoveAt(index);
-                Cards.Insert(index, copy[i]);
+                    //We are moving i to index
+                    newOrder[index] = copy[i];
+                }
             }
+
+            Cards = newOrder.ToList();
         }
 
         public Card Peek()
